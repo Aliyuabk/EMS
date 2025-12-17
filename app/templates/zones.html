@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Zones</h2>
+<form method="POST" class="mb-3">
+  {{ form.hidden_tag() }}
+  <div class="input-group">
+    {{ form.name(class_="form-control", placeholder="Zone Name") }}
+    {{ form.submit(class_="btn btn-success") }}
+  </div>
+</form>
+<ul class="list-group">
+  {% for zone in zones %}
+    <li class="list-group-item">{{ zone.name }}</li>
+  {% endfor %}
+</ul>
+{% endblock %}
