@@ -1,0 +1,19 @@
+{% extends 'jera_dashboard.html' %}
+{% block content %}
+<h3>Register New School</h3>
+<form method="POST">
+    <div class="mb-3">
+        <label>School Name</label>
+        <input type="text" name="school_name" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label>Zone</label>
+        <select name="zone_id" class="form-select">
+            {% for zone in zones %}
+                <option value="{{ zone.id }}">{{ zone.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button class="btn btn-success">Register</button>
+</form>
+{% endblock %}

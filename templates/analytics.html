@@ -1,0 +1,11 @@
+{% extends 'jera_dashboard.html' %}
+{% block content %}
+<h3>Analytics / Summary</h3>
+<ul>
+    <li>Total Schools: {{ total_schools }}</li>
+    <li>Total Students: {{ total_students }}</li>
+    <li>Male Students: {{ male_students }}</li>
+    <li>Female Students: {{ female_students }}</li>
+    <li>Students with 5 Credits & Above: {{ students_with_5_credits }}</li>
+</ul>
+{% endblock %}

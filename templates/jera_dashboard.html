@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jera Admin Dashboard</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            transition: 0.3s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .section-title { margin-top: 2rem; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Jera Admin</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#exam-selection">Exam Selection</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#zone-management">Zone Management</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#exam-management">Exam Management</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#subject-analysis">Subject Analysis</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#analytics">Analytics</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#photo-card">Photo Card</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+
+        <!-- Exam Selection -->
+        <h3 id="exam-selection" class="section-title">Exam Selection</h3>
+        <div class="card mb-3">
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('exam_management') }}">
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="exam_type" class="form-label">Exam Type</label>
+                            <select name="exam_type" class="form-select" required>
+                                <option value="QE">Qualifying Exam (QE)</option>
+                                <option value="BECE">Basic Education Certificate Exam (BECE)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="exam_year" class="form-label">Year</label>
+                            <input type="text" name="exam_year" class="form-control" value="2026" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="exam_date" class="form-label">Select Date</label>
+                            <input type="date" name="exam_date" class="form-control" required>
+                        </div>
+                        <div class="col-md-3 align-self-end">
+                            <button type="submit" class="btn btn-success w-100">Continue</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Zone Management -->
+        <h3 id="zone-management" class="section-title">Zone Management</h3>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="card card-hover">
+                    <div class="card-body">
+                        <h5 class="card-title">Register New School</h5>
+                        <p>Auto-generated school ID & student registration</p>
+                        <a href="{{ url_for('zone_management') }}" class="btn btn-success">Go</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exam Management -->
+        <h3 id="exam-management" class="section-title">Exam Management</h3>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="card card-hover">
+                    <div class="card-body">
+                        <h5 class="card-title">Result Entry</h5>
+                        <p>Select school → exam → student → enter scores → auto-compute totals.</p>
+                        <a href="{{ url_for('exam_management') }}" class="btn btn-success">Go</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subject Analysis -->
+        <h3 id="subject-analysis" class="section-title">Subject Analysis</h3>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="card card-hover">
+                    <div class="card-body">
+                        <h5 class="card-title">Generate Reports</h5>
+                        <p>Filter by year, exam, zone. Print-ready reports.</p>
+                        <a href="{{ url_for('subject_analysis') }}" class="btn btn-success">Go</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics -->
+        <h3 id="analytics" class="section-title">Analytics & Summary</h3>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="card card-hover">
+                    <div class="card-body">
+                        <h5 class="card-title">Performance Indicators</h5>
+                        <p>View zone, candidates, male/female, and credit statistics.</p>
+                        <a href="{{ url_for('analytics') }}" class="btn btn-success">Go</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Photo Card -->
+        <h3 id="photo-card" class="section-title">Photo Card Generation</h3>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="card card-hover">
+                    <div class="card-body">
+                        <h5 class="card-title">Generate A6 Photo Cards</h5>
+                        <p>Student details, exam info, and passport photo.</p>
+                        <a href="{{ url_for('photo_card', student_id=1) }}" class="btn btn-success">Go</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

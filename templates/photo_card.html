@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+.card {
+    width: 105mm;  /* A6 size */
+    height: 148mm;
+    border: 1px solid #000;
+    padding: 15px;
+    font-family: Arial, sans-serif;
+}
+.card img {
+    width: 100px;
+    height: 100px;
+}
+</style>
+</head>
+<body>
+<div class="card">
+    <h4>{{ student.school.name }} - {{ exam.name }} {{ exam.year }}</h4>
+    <img src="{{ student.photo_url }}" alt="Student Photo">
+    <p>Name: {{ student.name }}</p>
+    <p>DOB: {{ student.dob }}</p>
+    <p>LGA: {{ student.lga }}</p>
+    <p>Subjects Registered: {% for r in student.results %} {{ r.subject.name }}, {% endfor %}</p>
+    <footer>
+        Always come to the examination venue with this card and be present 30 minutes before the exam starts.
+    </footer>
+</div>
+</body>
+</html>

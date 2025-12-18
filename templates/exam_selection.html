@@ -1,0 +1,12 @@
+{% extends 'jera_dashboard.html' %}
+{% block content %}
+<h3>Select Exam</h3>
+<form method="POST">
+    <select name="exam_id" class="form-select mb-3">
+        {% for exam in exams %}
+            <option value="{{ exam.id }}">{{ exam.name }} - {{ exam.year }}</option>
+        {% endfor %}
+    </select>
+    <button class="btn btn-primary">Continue</button>
+</form>
+{% endblock %}

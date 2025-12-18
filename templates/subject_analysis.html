@@ -1,0 +1,40 @@
+{% extends 'jera_dashboard.html' %}
+{% block content %}
+<h3>Subject Analysis</h3>
+<form method="POST">
+    <div class="row mb-3">
+        <div class="col">
+            <label>Subject</label>
+            <select name="subject_id" class="form-select">
+                {% for subject in subjects %}
+                    <option value="{{ subject.id }}">{{ subject.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col">
+            <label>Exam</label>
+            <select name="exam_id" class="form-select">
+                {% for exam in exams %}
+                    <option value="{{ exam.id }}">{{ exam.name }} - {{ exam.year }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col">
+            <label>Zone</label>
+            <select name="zone_id" class="form-select">
+                {% for zone in zones %}
+                    <option value="{{ zone.id }}">{{ zone.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <button class="btn btn-primary">Generate</button>
+</form>
+
+{% if analysis_data %}
+<div class="mt-3">
+    <p>Number of Registered Students: {{ analysis_data.registered }}</p>
+    <p>Number of Non-Registered Students: {{ analysis_data.not_registered }}</p>
+</div>
+{% endif %}
+{% endblock %}

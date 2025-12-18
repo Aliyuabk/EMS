@@ -1,0 +1,66 @@
+{% extends 'jera_dashboard.html' %}
+{% block content %}
+<h3>Exam Management - Result Entry</h3>
+
+<form method="POST" class="mb-3">
+    <div class="row">
+        <div class="col">
+            <label>School</label>
+            <select name="school_id" class="form-select" onchange="this.form.submit()">
+                <option value="">--Select School--</option>
+                {% for school in schools %}
+                    <option value="{{ school.id }}" {% if school.id|string == selected_school %}selected{% endif %}>{{ school.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col">
+            <label>Exam</label>
+            <select name="exam_id" class="form-select" onchange="this.form.submit()">
+                <option value="">--Select Exam--</option>
+                {% for exam in exams %}
+                    <option value="{{ exam.id }}" {% if exam.id|string == selected_exam %}selected{% endif %}>{{ exam.name }} - {{ exam.year }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col">
+            <label>Student</label>
+            <select name="student_id" class="form-select" onchange="this.form.submit()">
+                <option value="">--Select Student--</option>
+                {% for student in students %}
+                    <option value="{{ student.id }}" {% if student.id|string == selected_student %}selected{% endif %}>{{ student.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+</form>
+
+{% if results is not none or selected_student %}
+<form method="POST">
+    <input type="hidden" name="school_id" value="{{ selected_school }}">
+    <input type="hidden" name="exam_id" value="{{ selected_exam }}">
+    <input type="hidden" name="student_id" value="{{ selected_student }}">
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>Subject</th>
+                <th>CA Score</th>
+                <th>Exam Score</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for subject in subjects %}
+            <tr>
+                <td>{{ subject.name }}</td>
+                <td><input type="number" name="ca_{{ subject.id }}" class="form-control" value="{{ results[loop.index0].ca_score if results else 0 }}"></td>
+                <td><input type="number" name="exam_{{ subject.id }}" class="form-control" value="{{ results[loop.index0].exam_score if results else 0 }}"></td>
+                <td>{{ results[loop.index0].total if results else 0 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button class="btn btn-success" name="save_results">Save Results</button>
+</form>
+{% endif %}
+
+{% endblock %}
