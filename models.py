@@ -4,8 +4,9 @@ from flask_bcrypt import Bcrypt
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 
-# Admins
+# ---------- Admin ----------
 class Admin(db.Model):
+    __tablename__ = 'admin'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
@@ -17,28 +18,37 @@ class Admin(db.Model):
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password, password)
 
-# Zones
+# ---------- Zone ----------
 class Zone(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
+    __tablename__ = 'zone'
+    __table_args__ = {'extend_existing': True}
 
-# Schools
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    schools = db.relationship('School', backref='zone', lazy=True)
+
+# ---------- School ----------
 class School(db.Model):
+    __tablename__ = 'school'
+    __table_args__ = {'extend_existing': True}
+
     id = db.Column(db.Integer, primary_key=True)
     code = db.Column(db.String(20), unique=True, nullable=False)
-    name = db.Column(db.String(100), nullable=False)
-    zone_id = db.Column(db.Integer, db.ForeignKey('zone.id'))
-    zone = db.relationship('Zone', backref='schools')
+    name = db.Column(db.String(150), nullable=False)
+    zone_id = db.Column(db.Integer, db.ForeignKey('zone.id'), nullable=False)
+    students = db.relationship('Student', backref='school', lazy=True)
 
-# Exams
+# ---------- Exam ----------
 class Exam(db.Model):
+    __tablename__ = 'exam'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))  # QE / BECE
     year = db.Column(db.Integer)
     date = db.Column(db.Date)
 
-# Students
+# ---------- Student ----------
 class Student(db.Model):
+    __tablename__ = 'student'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     dob = db.Column(db.Date)
@@ -46,20 +56,21 @@ class Student(db.Model):
     lga = db.Column(db.String(50))
     guardian_contact = db.Column(db.String(20))
     school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
-    school = db.relationship('School', backref='students')
+    results = db.relationship('Result', backref='student', lazy=True)
 
-# Subjects
+# ---------- Subject ----------
 class Subject(db.Model):
+    __tablename__ = 'subject'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
+    results = db.relationship('Result', backref='subject', lazy=True)
 
-# Result
+# ---------- Result ----------
 class Result(db.Model):
+    __tablename__ = 'result'
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey('student.id'))
     subject_id = db.Column(db.Integer, db.ForeignKey('subject.id'))
     ca_score = db.Column(db.Float)
     exam_score = db.Column(db.Float)
     total = db.Column(db.Float)
-    student = db.relationship('Student', backref='results')
-    subject = db.relationship('Subject', backref='results')

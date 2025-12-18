@@ -72,17 +72,24 @@
 
         <!-- Zone Management -->
         <h3 id="zone-management" class="section-title">Zone Management</h3>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <div class="card card-hover">
-                    <div class="card-body">
-                        <h5 class="card-title">Register New School</h5>
-                        <p>Auto-generated school ID & student registration</p>
-                        <a href="{{ url_for('zone_management') }}" class="btn btn-success">Go</a>
-                    </div>
-                </div>
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Jigawa State Zones & Schools</h5>
+                <ul class="list-group">
+                    {% for zone in zones %}
+                    <li class="list-group-item">
+                        <strong>{{ zone.name }}</strong>
+                        <ul>
+                            {% for school in zone.schools %}
+                            <li>{{ school.name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    {% endfor %}
+                </ul>
             </div>
         </div>
+
 
         <!-- Exam Management -->
         <h3 id="exam-management" class="section-title">Exam Management</h3>

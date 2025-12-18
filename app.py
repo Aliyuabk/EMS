@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, flash, request
 from config import Config
-from models import db, bcrypt, Admin, School, Zone, Exam, Student, Subject, Result
+from models import db, bcrypt, Admin, Zone, School, Exam, Student, Subject, Result
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -9,19 +9,19 @@ db.init_app(app)
 bcrypt.init_app(app)
 
 # Initialize DB and default admins
-# def init_db():
-#     with app.app_context():
-#         db.create_all()
-#         if not Admin.query.filter_by(username='schooladmin').first():
-#             admin1 = Admin(username='schooladmin', role='school')
-#             admin1.set_password('school123')
-#             db.session.add(admin1)
-#         if not Admin.query.filter_by(username='jeraadmin').first():
-#             admin2 = Admin(username='jeraadmin', role='jera')
-#             admin2.set_password('jera123')
-#             db.session.add(admin2)
-#         db.session.commit()
-# init_db()
+def init_db():
+    with app.app_context():
+        db.create_all()
+        if not Admin.query.filter_by(username='schooladmin').first():
+            admin1 = Admin(username='schooladmin', role='school')
+            admin1.set_password('school123')
+            db.session.add(admin1)
+        if not Admin.query.filter_by(username='jeraadmin').first():
+            admin2 = Admin(username='jeraadmin', role='jera')
+            admin2.set_password('jera123')
+            db.session.add(admin2)
+        db.session.commit()
+init_db()
 
 # ---------- LOGIN ----------
 from forms import LoginForm
@@ -47,9 +47,13 @@ def school_dashboard():
     return render_template('school_dashboard.html')
 
 
-@app.route('/dashboard/jera')
+@app.route('/dashboard/jera', methods=['GET', 'POST'])
 def jera_dashboard():
-    return render_template('jera_dashboard.html')
+    zones = Zone.query.all()
+    schools = School.query.all()
+    exams = Exam.query.all()
+    return render_template('jera_dashboard.html', zones=zones, schools=schools, exams=exams)
+
 
 # ---------- EXAM MANAGEMENT ----------
 @app.route('/jera/exam_management', methods=['GET', 'POST'])
@@ -143,6 +147,41 @@ def photo_card(student_id):
     student = Student.query.get(student_id)
     exam = Exam.query.order_by(Exam.year.desc()).first()  # latest exam
     return render_template('photo_card.html', student=student, exam=exam)
+
+@app.route('/jera/zone_management', methods=['GET', 'POST'])
+def zone_management():
+    zones = Zone.query.all()
+    # You can implement school/student registration here
+    return render_template('zone_management.html', zones=zones)
+
+def init_zones_and_schools():
+    with app.app_context():
+        # Example zone
+        zone = Zone.query.filter_by(name='Jigawa North').first()
+        if not zone:
+            zone = Zone(name='Jigawa North')
+            db.session.add(zone)
+            db.session.commit()
+
+        # Example school
+        if not School.query.filter_by(name='ABC Secondary School').first():
+            school = School(
+                code='JN001',  # <-- add a unique code
+                name='ABC Secondary School',
+                zone_id=zone.id
+            )
+            db.session.add(school)
+
+        if not School.query.filter_by(name='XYZ Secondary School').first():
+            school = School(
+                code='JN002',  # <-- add a unique code
+                name='XYZ Secondary School',
+                zone_id=zone.id
+            )
+            db.session.add(school)
+
+        db.session.commit()
+
 
 # ---------- RUN APP ----------
 if __name__ == '__main__':
