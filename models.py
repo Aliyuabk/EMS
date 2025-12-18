@@ -20,23 +20,32 @@ class Admin(db.Model):
 
 # ---------- Zone ----------
 class Zone(db.Model):
-    __tablename__ = 'zone'
-    __table_args__ = {'extend_existing': True}
+    __tablename__ = 'zones'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
+    name = db.Column(db.String(100), nullable=False, unique=True)
+
     schools = db.relationship('School', backref='zone', lazy=True)
+
+    def __repr__(self):
+        return f"<Zone {self.name}>"
+
+
 
 # ---------- School ----------
 class School(db.Model):
-    __tablename__ = 'school'
-    __table_args__ = {'extend_existing': True}
+    __tablename__ = 'schools'
 
     id = db.Column(db.Integer, primary_key=True)
-    code = db.Column(db.String(20), unique=True, nullable=False)
     name = db.Column(db.String(150), nullable=False)
-    zone_id = db.Column(db.Integer, db.ForeignKey('zone.id'), nullable=False)
-    students = db.relationship('Student', backref='school', lazy=True)
+    code = db.Column(db.String(50), nullable=False, unique=True)
+
+    zone_id = db.Column(db.Integer, db.ForeignKey('zones.id'), nullable=False)
+
+    def __repr__(self):
+        return f"<School {self.name} - Zone {self.zone_id}>"
+
+
 
 # ---------- Exam ----------
 class Exam(db.Model):
@@ -74,3 +83,21 @@ class Result(db.Model):
     ca_score = db.Column(db.Float)
     exam_score = db.Column(db.Float)
     total = db.Column(db.Float)
+
+JIGAWA_ZONES = [
+    "Auyo", "Babura", "Biriniwa", "Birnin Kudu",
+    "Buji", "Dutse", "Gagarawa", "Garki",
+    "Gumel", "Guri", "Gwaram", "Gwiwa",
+    "Hadejia", "Jahun", "Kafin Hausa", "Kazaure",
+    "Kiri Kasamma", "Kiyawa", "Maigatari", "Malam Madori",
+    "Miga", "Ringim", "Roni", "Sule Tankarkar",
+    "Taura", "Yankwashi"
+]
+
+def seed_zones():
+    for name in JIGAWA_ZONES:
+        zone = Zone.query.filter_by(name=name).first()
+        if not zone:
+            db.session.add(Zone(name=name))
+    db.session.commit()
+

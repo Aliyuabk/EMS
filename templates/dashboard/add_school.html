@@ -1,0 +1,51 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-sm-12 col-xl-6">
+            <div class="bg-light rounded h-100 p-4">
+                <h6 class="mb-4">Add School</h6>
+
+                <!-- Flash Messages -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ 'danger' if category=='danger' else 'success' }}" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <!-- School Form -->
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">School Name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter school name" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="code" class="form-label">School Code</label>
+                        <input type="text" class="form-control" id="code" name="code" placeholder="Enter school code" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="zone_id" class="form-label">Zone</label>
+                        <select class="form-select" id="zone_id" name="zone_id" required>
+                            <option value="" selected disabled>Select a zone</option>
+                            {% for zone in zones %}
+                                <option value="{{ zone.id }}">{{ zone.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Add School</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
